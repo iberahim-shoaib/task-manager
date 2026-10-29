@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Task Manager</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 850px;
+            margin: 35px auto;
+            padding: 0 18px;
+            background: #f4f6f8;
+            color: #222;
+        }
+        section, .task {
+            background: white;
+            padding: 18px;
+            margin-bottom: 16px;
+            border-radius: 8px;
+        }
+        input, textarea, select, button {
+            padding: 10px;
+            margin: 5px 0;
+            box-sizing: border-box;
+            max-width: 100%;
+        }
+        input, textarea, select {
+            width: 100%;
+        }
+        button, .link-button {
+            cursor: pointer;
+        }
+        .task p {
+            overflow-wrap: anywhere;
+        }
+        .completed {
+            text-decoration: line-through;
+            color: #666;
+        }
+        .actions {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .actions form {
+            margin: 0;
+        }
+    </style>
+</head>
+<body>
+    <h1>My Task Manager</h1>
+    <p>Organize your tasks and track your progress.</p>
+
+    <section>
+        <h2>Add a task</h2>
+        <form method="POST" action="/">
+            <label>Title</label>
+            <input type="text" name="title" maxlength="200"
+                   placeholder="What do you need to do?" required>
+
+            <label>Description</label>
+            <textarea name="description"
+                      placeholder="Task details"></textarea>
+
+            <label>Priority</label>
+            <select name="priority">
+                <option>Low</option>
+                <option selected>Medium</option>
+                <option>High</option>
+            </select>
+
+            <label>Due date</label>
+            <input type="date" name="due_date">
+
+            <button type="submit">Add Task</button>
+        </form>
+    </section>
+
+    <section>
+        <h2>Find tasks</h2>
+        <form method="GET" action="/">
+            <input type="text" name="q" value="{{ search }}"
+                   placeholder="Search task titles">
+
+            <select name="status">
+                <option value="all"
+                    {% if status == 'all' %}selected{% endif %}>
+                    All tasks
+                </option>
+                <option value="pending"
+                    {% if status == 'pending' %}selected{% endif %}>
+                    Pending
+                </option>
+                <option value="completed"
+                    {% if status == 'completed' %}selected{% endif %}>
+                    Completed
+                </option>
+            </select>
+
+            <button type="submit">Search and Filter</button>
+            <a href="/">Clear filters</a>
+        </form>
+    </section>
+
+    <h2>Tasks ({{ tasks|length }})</h2>
+
+    {% for task in tasks %}
+        <section class="task">
+            <h3 class="{% if task.completed %}completed{% endif %}">
+                {{ task.title }}
+            </h3>
+
+            <p>{{ task.description or 'No description' }}</p>
+            <p>Priority: {{ task.priority }}</p>
+            <p>Due date: {{ task.due_date or 'Not set' }}</p>
+            <p>Status:
+                {% if task.completed %}Completed{% else %}Pending{% endif %}
+            </p>
+
+            <div class="actions">
+                <a href="/tasks/{{ task.id }}/edit">Edit</a>
+
+                <form method="POST"
+                      action="/tasks/{{ task.id }}/toggle">
+                    <button type="submit">
+                        {% if task.completed %}
+                            Mark Pending
+                        {% else %}
+                            Mark Complete
+                        {% endif %}
+                    </button>
+                </form>
+
+                <form method="POST"
+                      action="/tasks/{{ task.id }}/delete"
+                      onsubmit="return confirm('Delete this task?')">
+                    <button type="submit">Delete</button>
+                </form>
+            </div>
+        </section>
+    {% else %}
+        <p>No tasks found. Try adding a task or clearing your filters.</p>
+    {% endfor %}
+</body>
+</html>
