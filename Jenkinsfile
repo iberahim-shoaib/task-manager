@@ -22,7 +22,7 @@ pipeline {
                     string(credentialsId: 'taskmanager-mysql-root-password',
                            variable: 'MYSQL_ROOT_PASSWORD')
                 ]) {
-                    sh 'docker compose -p task-manager -f docker-compose-part2.yml config -q'
+                    sh 'docker compose -p taskmanager -f docker-compose-part2.yml config -q'
                 }
             }
         }
@@ -43,7 +43,7 @@ pipeline {
                     string(credentialsId: 'taskmanager-mysql-root-password',
                            variable: 'MYSQL_ROOT_PASSWORD')
                 ]) {
-                    sh 'docker compose -p task-manager -f docker-compose-part2.yml up -d --remove-orphans'
+                    sh 'docker compose -p taskmanager -f docker-compose-part2.yml up -d --remove-orphans'
                 }
             }
         }
