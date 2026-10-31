@@ -4,7 +4,7 @@ services:
     image: iberahimshoaib/task-manager:latest
     container_name: task-manager-web-part2
     ports:
-      - "8081:5000"
+      - "8082:5000"
     volumes:
       - .:/app
     environment:
