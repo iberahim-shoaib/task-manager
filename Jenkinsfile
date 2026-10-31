@@ -4,7 +4,7 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'iberahimshoaib/task-manager:latest'
-        TEST_EMAIL = 'ibrahimshoaib054@gmail.com'
+        TEST_EMAIL = 'ibrahimshoaib054@gmail.com, qasimalik@gmail.com'
     }
 
     stages {
